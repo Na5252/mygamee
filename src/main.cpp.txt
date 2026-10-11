@@ -1,0 +1,20 @@
+ #include "raylib.h"
+
+int main()
+{
+    InitWindow(800, 450, "Moving Square");
+    SetTargetFPS(60);
+
+    while (!WindowShouldClose())
+    {
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+
+        DrawRectangle(100, 100, 50, 50, RED);
+
+        EndDrawing();
+    }
+
+    CloseWindow();
+    return 0;
+}
