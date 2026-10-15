@@ -1,16 +1,50 @@
- #include "raylib.h"
+#include "raylib.h"
 
 int main()
 {
-    InitWindow(800, 450, "Moving Square");
+    InitWindow(800, 600, "Gamee");
     SetTargetFPS(60);
+
+    Vector2 player = {100, 300};
+    Vector2 enemy = {400, 300};
+
+    int health = 100;
+    float damageTimer = 0.0f;
 
     while (!WindowShouldClose())
     {
+        float dt = GetFrameTime();
+
+        // Move player with arrow keys
+        if (IsKeyDown(KEY_RIGHT)) player.x += 200 * dt;
+        if (IsKeyDown(KEY_LEFT))  player.x -= 200 * dt;
+        if (IsKeyDown(KEY_UP))    player.y -= 200 * dt;
+        if (IsKeyDown(KEY_DOWN))  player.y += 200 * dt;
+
+        // damage cooldown
+        if (damageTimer > 0)
+            damageTimer -= dt;
+
+        // Check collision
+        if (CheckCollisionCircles(player, 20, enemy, 25)
+            && damageTimer <= 0
+            && health > 0)
+        {
+            health -= 10;
+            damageTimer = 1.0f;
+        }
+
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
-        DrawRectangle(100, 100, 50, 50, RED);
+        DrawCircleV(player, 20, BLUE);
+        DrawCircleV(enemy, 25, RED);
+
+        DrawText(TextFormat("Health: %d", health),
+                 20, 20, 25, BLACK);
+
+        if (health <= 0)
+            DrawText("GAME OVER", 300, 250, 40, RED);
 
         EndDrawing();
     }
